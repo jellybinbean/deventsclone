@@ -116,6 +116,10 @@ EventSchema.pre('save', function (next) {
       .replace(/\s+/g, '-') // Replace spaces with hyphens
       .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
       .trim();
+    
+    if (!this.slug) {
+      return next(new Error('Title must contain at least one alphanumeric character'));
+    }
   }
 
   // Normalize date to ISO format (YYYY-MM-DD)
