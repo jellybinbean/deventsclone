@@ -18,8 +18,13 @@ export async function POST(req:NextRequest){
         if(!file){
             return NextResponse.json({message: "File is required"}, {status: 400});
         }
-        const tags = JSON.parse(formdata.get("tags") as string)
-        const agenda = JSON.parse(formdata.get("agenda") as string)
+        let tags, agenda;
+        try {
+            tags = JSON.parse(formdata.get("tags") as string);
+            agenda = JSON.parse(formdata.get("agenda") as string);
+        } catch {
+            return NextResponse.json({message: "Invalid JSON in tags or agenda"}, {status: 400});
+        }
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const uploadResult = await new Promise((resolve, reject) => {
